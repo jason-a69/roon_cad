@@ -1,5 +1,5 @@
 # roon_ca_sense
-Roon cover art display on sense hat
+Roon cover art display on a a sense hat (https://www.raspberrypi.com/products/sense-hat/)
 
 ## Prerequisites
 
@@ -10,8 +10,7 @@ A Roon audio subscription
   - a Raspberry Pi (I used a Pi 0 V1)
   
 ### Software
-  - Dietpi (www.dietpi.com) I used V6 Bullseye
-  - (Raspian should work without any trouble).
+  - Dietpi (www.dietpi.com) I used V6 Bullseye (Raspian should work without any trouble).
   
 ### Additional software installed and instructions  
   `sudo apt install sense-hat python3-pip`
@@ -88,3 +87,4 @@ Play some music in the correct zone and your sense hat should light up
 
 When you stop the music the sense hat display should turn off
   
+Enjoy!
