@@ -101,7 +101,7 @@ You need to download the python libraries from waveshare and copy them over to `
 
 In `/boot/config.txt` make sure this is set `dtparam=spi=on`
 
-Reboot the Pi for changes to take effect
+Changes will not take effect until a reboot. Carry on setting up the serivce in the next step and then reboot.
 
 ### Service file setup
 Changes to `roon_ca.service`
@@ -124,7 +124,7 @@ Now copy the service file, enable and start it.
   
 Check everything is running with
 
-`sudo systemctl status roon_ca`
+`sudo systemctl status roon_cad`
   
 Play some music in the correct zone and your sense hat should light up
 
