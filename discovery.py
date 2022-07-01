@@ -3,8 +3,8 @@ import time
 from roonapi import RoonApi, RoonDiscovery
 
 appinfo = {
-    "extension_id": "roon_ca_sense",
-    "display_name": "Python program to display cover art on a sense hat",
+    "extension_id": "roon_cad",
+    "display_name": "Python program to display cover art on display",
     "display_version": "1.0.0",
     "publisher": "jason-a69",
     "email": "email@yahoo.co.uk",

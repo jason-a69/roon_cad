@@ -1,14 +1,14 @@
-# systemd unit file for the Sense Display Service
+# systemd unit file for the Roon Cover Art Display
 
 [Unit]
 
 # Human readable name of the unit
-Description=Roon Display Service
+Description=Roon Cover Art Display Service
 
 [Service]
 
 # Command to execute when the service is started
-ExecStart=/bin/bash -c '/usr/bin/python3 /usr/local/bin/roon_ca_sense.py'
+ExecStart=/bin/bash -c '/usr/bin/python3 /usr/local/bin/roon_cad.py'
 Environment=PYTHONUNBUFFERED=1
 
 # Automatically restart the service if it crashes
