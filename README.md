@@ -1,12 +1,13 @@
 # roon_ca
-Roon cover art display on a a sense hat (https://www.raspberrypi.com/products/sense-hat/)
-
+Roon cover art display on 
+1. sense hat (https://www.raspberrypi.com/products/sense-hat/)
+2. Waveshare 1.5" (https://www.waveshare.com/1.5inch-rgb-oled-module.htm)
 ## Prerequisites
 
 A Roon audio subscription
 
 ### Hardware 
-  - a sense hat
+  - a display listed above
   - a Raspberry Pi (I used a Pi 0 V1)
   
 ### Software
@@ -43,9 +44,9 @@ Create configuration files
   
 Download the repository
 
-`git clone https://github.com/jason-a69/roon_ca_sense`
+`git clone https://github.com/jason-a69/roon_ca`
 
-`cd roon_ca_sense`
+`cd roon_ca`
   
 Setup the files needed for Roon Audio (many thanks to https://github.com/pavoni/pyroon without his assistance this would not have been possible)
 
@@ -65,25 +66,33 @@ Copy the main program to /usr/local/bin
 
 `sudo cp roon_ca_sense.py /usr/local/bin/.`
    
-Copy the service file and enable and start it, if you are not using use dietpi then you will need to change line
+Copy the service file and enable and start it, if you are not using user dietpi then you will need to change line
 
 `User = dietpi`
 
-to reflect that...then
-  
-`sudo cp roon_ca_sense.service /lib/systemd/system/.`
+to the user you are using for your OS.
+
+You also need to change the line
+
+`ExecStart=/bin/bash -c '/usr/bin/python3 /usr/local/bin/roon_ca_sense.py'`
+
+To the display you are using, the above example assumes the sense hat
+
+Now copy the service file, enable and start it.
+
+`sudo cp roon_ca.service /lib/systemd/system/.`
 
 `sudo systemd daemon-reload`
 
-`sudo systemd enable roon_ca_sense`
+`sudo systemd enable roon_ca`
 
-`sudo systemd start roon_ca_sense`
+`sudo systemd start roon_ca`
   
 Check everything is running with
 
-`sudo systemctl status roon_ca_sense`
+`sudo systemctl status roon_ca`
   
-Play some music in the correct zone and your sense hat should light up
+Play some music in the correct zone and your display should light up
 
 When you stop the music the sense hat display should turn off
   
