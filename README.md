@@ -1,4 +1,4 @@
-# roon_ca_sense
+# roon_ca
 Roon cover art display on a a sense hat (https://www.raspberrypi.com/products/sense-hat/)
 
 ## Prerequisites
