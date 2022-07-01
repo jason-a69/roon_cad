@@ -97,14 +97,13 @@ You need to download the python libraries from waveshare and copy them over to `
 
 `sudo chown -R dietpi /usr/local/bin/waveshare_OLED`
 
-(substitute dietpi with pi if you are using Rasbian in the above line)
+(substitute dietpi with pi if you are using Rasbian)
 
-In `/boot/config.txt` make sure this is set `dtparam=spi=on`
+In `/boot/config.txt` make sure this is set to `dtparam=spi=on`
 
-Changes will not take effect until a reboot. Carry on setting up the serivce in the next step and then reboot.
-
+Changes will not take effect until a reboot so reboot now, login and `cd roon_cad` and carry on with the service setup 
 ### Service file setup
-Changes to `roon_ca.service`
+Changes to `roon_cad.service`
 
 If you are not using user dietpi then you will need to change line
 
@@ -126,8 +125,8 @@ Check everything is running with
 
 `sudo systemctl status roon_cad`
   
-Play some music in the correct zone and your sense hat should light up
+Play some music in the correct zone and your display should light up 
 
-When you stop the music the sense hat display should turn off
+When you stop the music the display should turn off
 
 Enjoy!
