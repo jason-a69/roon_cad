@@ -3,7 +3,7 @@
 [Unit]
 
 # Human readable name of the unit
-Description=Sense Display Service
+Description=Roon Display Service
 
 [Service]
 
