@@ -14,8 +14,14 @@ You will need a Roon audio subscription
 ### Software
   - Dietpi (www.dietpi.com) I used V6 Bullseye (Raspian should work without any trouble).
   
-Clone this repository (`https://github.com/jason-a69/roon_cad`)
+Clone this repository 
+
+`https://github.com/jason-a69/roon_cad`
+
+`cd roon_cad`
+
 Run the setup script
+
 `./setup.sh`
 
 Play some music in the correct zone and your display should light up 
