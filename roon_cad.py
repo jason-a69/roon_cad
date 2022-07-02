@@ -13,8 +13,8 @@ appinfo = {
 }
 
 try:
-    core_id = open("/etc/roon/my_core_id_file").read()
-    token = open("/etc/roon/my_token_file").read()
+    core_id = open("/etc/roon_cad/my_core_id_file").read()
+    token = open("/etc/roon_cad/my_token_file").read()
 except OSError:
     print("Please authorise first using discovery.py")
     exit()
