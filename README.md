@@ -16,13 +16,15 @@ You will need a Roon audio subscription
   
 Clone this repository 
 
-`https://github.com/jason-a69/roon_cad`
+`git clone https://github.com/jason-a69/roon_cad`
 
 `cd roon_cad`
 
 Run the setup script
 
 `./setup.sh`
+
+After a reboot...
 
 Play some music in the correct zone and your display should light up 
 
