@@ -124,3 +124,7 @@ else
   python3 ./discovery.py
   sleep 2
 fi
+echo ""
+echo "Need to reboot, doing that now"
+sleep 5
+sudo reboot
