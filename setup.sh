@@ -55,11 +55,11 @@ case $c_display_type in
     sudo apt-get install -y p7zip-full
     sudo wget https://www.waveshare.com/w/upload/2/2c/OLED_Module_Code.7z
     7z x OLED_Module_Code.7z -O./OLED_Module_Code
-    sudo cp OLED_Module_Code/RaspberryPi/python/lib/waveshare_OLED /usr/local/bin/.
+    sudo cp -r ./OLED_Module_Code/RaspberryPi/python/lib/waveshare_OLED /usr/local/bin/.
     sudo chown -R $USER /usr/local/bin/waveshare_OLED
     echo ""
     echo "Checking /boot/config.txt for required parameters, changing if required"
-    grep -qxF 'dtparam=spi=on' /boot/config.txt || echo 'dtparam=spi=on' >> /boot/config.txt
+    sudo bash -c 'grep -qxF 'dtparam=spi=on' /boot/config.txt || sudo echo 'dtparam=spi=on' >> /boot/config.txt'
     ;;
 esac
 sleep 2
