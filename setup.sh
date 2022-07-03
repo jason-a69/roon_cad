@@ -92,7 +92,7 @@ fi
 echo ""
 echo "Patching the service file with current user information "
 echo ""
-sed -i "0,/User=/{s/User=.*/User=\"${USER}\"/}" ./roon_cad.service
+sed -i "0,/User=/{s/User=.*/User=${USER}/}" ./roon_cad.service
 sleep 2
 echo ""
 echo "Moving service into place and enabling it"
