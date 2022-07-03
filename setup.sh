@@ -51,8 +51,8 @@ case $c_display_type in
     sudo apt install -y sense-hat
     ;;
   2)
+    sudo apt-get install -y p7zip-full sense-hat
     pip3 install pillow numpy RPi.GPIO spidev smbus
-    sudo apt-get install -y p7zip-full
     sudo wget https://www.waveshare.com/w/upload/2/2c/OLED_Module_Code.7z
     7z x OLED_Module_Code.7z -O./OLED_Module_Code
     sudo cp -r ./OLED_Module_Code/RaspberryPi/python/lib/waveshare_OLED /usr/local/bin/.
