@@ -5,18 +5,24 @@
 # 2. Which output display are they using (sense hat or Waveshare 1.5# LCD)
 
 echo " "
-echo " *** Roon Cover Art Display setup script *** "
+echo "*** Roon Cover Art Display setup script *** "
 echo " "
 echo ""
-echo " The current user will be setup to run this service"
+echo "The current user will be setup to run this service"
 echo " "
-echo "** IF YOU ARE ROOT THEN LOG OUT AND LOG IN AS A NORMAL USER **"
+if [[ $EUID -eq 0 ]]; then
+    echo "Do not run this as the root user"
+    echo "Exiting"
+    exit 1
+fi
+echo " "
+echo "** This script will reboot the Pi at the end of the installation **"
 echo " "
 echo " "
-echo " I need 2 things from you to setup this script"
+echo "I need 2 things from you to setup this script"
 echo " "
-echo " I need to know which Roon zone the Pi will be in and I also need to know"
-echo " which LED display you will be using"
+echo "I need to know which Roon zone the Pi will be in and I also need to know"
+echo "which LED display you will be using"
 echo " "
 echo "(You can stop this script with CTRL-C)"
 echo " "
@@ -93,14 +99,14 @@ echo "Moving service into place and enabling it"
 echo ""
 sudo cp roon_cad.service /lib/systemd/system/roon_cad.service
 sudo systemctl daemon-reload
-sudo systemctl enbable roon_cad
+sudo systemctl enable roon_cad
 sleep 2
 echo ""
 echo "Adding current user to groups required to access LED displays"
 echo ""
 sudo usermod -a -G video,input,spi,gpio $USER
 sleep 2
-if [ -f /etc/roon_cad ]
+if [ -d /etc/roon_cad ]
 then
   echo ""
   echo "roon_cad directory exists, no need to authorise the service in the roon app ... continuing ..."
@@ -109,6 +115,8 @@ then
 else
   echo ""
   echo "Setting up the Roon app"
+  echo "You will need to open the Roon app on your device and enable roon_cad in settings / extensions"
+  read -p "Press any key to continue " c_dummy
   echo ""
   sleep 2
   sudo mkdir -p /etc/roon_cad
@@ -117,14 +125,12 @@ else
   sudo chmod 777 /etc/roon_cad/my_core_id_file
   sudo chmod 777 /etc/roon_cad/my_token_file
   echo ""
-  echo "About to the run the discovery program, please authorise the roon_cad extension in"
-  echo "the Roon app when prompted"
-  echo ""
   sleep 2
   python3 ./discovery.py
   sleep 2
 fi
 echo ""
 echo "Need to reboot, doing that now"
+echo ""
 sleep 5
 sudo reboot

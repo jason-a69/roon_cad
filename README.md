@@ -20,6 +20,8 @@ Clone this repository
 
 `cd roon_cad`
 
+`chmod +x setup.sh`
+
 Run the setup script
 
 `./setup.sh`

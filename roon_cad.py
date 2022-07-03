@@ -89,11 +89,16 @@ while True:
                                 if display_type == "sense":
                                     """Save the picture and then display it on the sense hat"""
                                     display_image.save("/tmp/roon.png")
-                                    disp.load_image("/tmp/roon.png")
+                                    try:
+                                        disp.load_image("/tmp/roon.png")
+                                    except:
+                                        print("Error opening image for album ",album)
                                 elif display_type == "ws1in5":
                                     """On the waveshare it is much easier to display"""
-                                    disp.ShowImage(disp.getbuffer(display_image))
-
+                                    try:
+                                        disp.ShowImage(disp.getbuffer(display_image))
+                                    except:
+                                        print("Error opening image for album ",album)
                         prev_album = album
                 else:
                     """If nothing is playing then clear the display"""
