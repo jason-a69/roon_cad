@@ -44,15 +44,15 @@ sleep 2
 echo ""
 echo "Installing software"
 echo ""
-sudo apt install -y python3-pip
-pip3 install roonapi
+sudo apt install -y python3-pip python3-dev
+pip3 install roonapi --break-system-packages
 case $c_display_type in
   1)
     sudo apt install -y sense-hat
     ;;
   2)
     sudo apt-get install -y p7zip-full sense-hat
-    pip3 install pillow numpy RPi.GPIO spidev smbus
+    pip3 install pillow numpy RPi.GPIO spidev smbus --break-system-packages
     sudo wget https://www.waveshare.com/w/upload/2/2c/OLED_Module_Code.7z
     7z x OLED_Module_Code.7z -O./OLED_Module_Code
     sudo cp -r ./OLED_Module_Code/RaspberryPi/python/lib/waveshare_OLED /usr/local/bin/.
