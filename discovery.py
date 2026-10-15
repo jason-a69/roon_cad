@@ -1,4 +1,5 @@
 import time
+import tomli_w
 
 from roonapi import RoonApi, RoonDiscovery
 
@@ -37,11 +38,16 @@ print("Shutdown apis")
 for api in apis:
     api.stop()
 
-# This is what we need to reconnect
-core_id = api.core_id
-token = api.token
+config_data = {
+    "server": {
+        "host": api.host,
+        "core_name": api.core_name,
+        "core_id": api.core_id,
+        "token": api.token
+    }
+}
 
-with open("/etc/roon_cad/my_core_id_file", "w") as f:
-    f.write(api.core_id)
-with open("/etc/roon_cad/my_token_file", "w") as f:
-    f.write(api.token)
+
+with open("/etc/roon_cad/config.toml", "wb") as toml_file:
+    tomli_w.dump(config_data, toml_file)
+

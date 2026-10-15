@@ -1,5 +1,6 @@
 import time
 import random
+import tomllib
 
 from roonapi import RoonApi, RoonDiscovery
 from urllib.request import urlopen
@@ -19,17 +20,12 @@ appinfo = {
 
 authorized_yn = "Y"
 
-my_core_id_file = "/etc/roon_cad/my_core_id_file"
-if path.exists(my_core_id_file):
-    core_id = open(my_core_id_file).read()
-else:
-    core_id = "None"
+with open("/etc/roon_cad/config.toml", "rb") as toml_file:
+    config = tomllib.load(toml_file)
 
-my_token_file = "/etc/roon_cad/my_token_file"
-if path.exists(my_token_file):
-    token = open(my_token_file).read()
-else:
-    token = "None"
+
+core_id = config["server"]["core_id"]
+token = config["server"]["token"]
 
 """display_type can be sense for a sense hat,
                        ws1in5 for a waveshare 1.5" SKU14747 """

@@ -1,9 +1,9 @@
-# systemd unit file for the Roon Cover Art Display
+# systemd unit file for the Roon Cover Art Display (local display)
 
 [Unit]
 
 # Human readable name of the unit
-Description=Roon Cover Art Display Service
+Description=Roon Cover Art Display Service (local display)
 
 [Service]
 
