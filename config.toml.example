@@ -1,0 +1,12 @@
+[server]
+host = "<ip address>"
+core_name = "roon"
+core_id = "<big string>"
+token = "<big string>"
+target_zone = "Qutest"
+[pico]
+ip = "<ip address>"
+port = 5000
+basewidth = 48
+[local]
+display_type = "wslin5"

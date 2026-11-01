@@ -1,15 +1,27 @@
+import sys
 import time
 import tomli_w
 
 from roonapi import RoonApi, RoonDiscovery
 
-appinfo = {
-    "extension_id": "roon_cad",
-    "display_name": "Python program to display cover art on display",
-    "display_version": "1.0.0",
-    "publisher": "jason-a69",
-    "email": "email@yahoo.co.uk",
-}
+running_mode = sys.argv[1]
+
+if running_mode == "L":
+    appinfo = {
+        "extension_id": "roon_cad_local",
+        "display_name": "Python program to display cover art on a local display",
+        "display_version": "1.0.0",
+        "publisher": "jason-a69",
+        "email": "email@yahoo.co.uk",
+    }
+elif running_mode == "P":
+    appinfo = {
+        "extension_id": "roon_cad_pico",
+        "display_name": "Python program to display cover art on a Pi Pico display",
+        "display_version": "1.0.0",
+        "publisher": "jason-a69",
+        "email": "email@yahoo.co.uk",
+    }
 
 discover = RoonDiscovery(None)
 servers = discover.all()
@@ -47,7 +59,6 @@ config_data = {
     }
 }
 
-
-with open("/etc/roon_cad/config.toml", "wb") as toml_file:
+with open("/etc/roon/config.toml", "wb") as toml_file:
     tomli_w.dump(config_data, toml_file)
 
