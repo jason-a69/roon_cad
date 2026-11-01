@@ -4,7 +4,9 @@ import tomli_w
 
 from roonapi import RoonApi, RoonDiscovery
 
-running_mode = sys.argv[1]
+running_mode = sys.argv[1].strip()
+
+#print(f"running_mode is {running_mode}")
 
 if running_mode == "L":
     appinfo = {
@@ -59,6 +61,7 @@ config_data = {
     }
 }
 
+#print(f"config_data is {config_data}")
+
 with open("/etc/roon/config.toml", "wb") as toml_file:
     tomli_w.dump(config_data, toml_file)
-

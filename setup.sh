@@ -36,19 +36,19 @@ read -r c_roon_zone
 echo " "
 if [[ "$c_local_or_pico" = "L" ]]; then
     echo "Please enter 1 for a sense hat, 2 for Waveshare 1.5 LCD (SKU 14747) or 3 for 2 inch TFT: "
-    read -r c_display_type
-    case $c_display_type in
+    read -r c_display_number
+    case $c_display_number in
       1)
-        c_display_name="sense"
+        c_display_type="sense"
         ;;
       2)
-        c_display_name="ws1in5"
+        c_display_type="ws1in5"
         ;;
       3)
-        c_display_name="2.0TFT"
+        c_display_type="2.0TFT"
         ;;
     esac
-    echo "You display type is : " "$c_display_name"
+    echo "You display type is : " "$c_display_type"
 elif [[ "$c_local_or_pico" = "P" ]]; then
     echo " "
     echo "Please enter the IP address of your Pico " 
@@ -67,10 +67,9 @@ sleep 2
 echo ""
 echo "Installing software"
 echo ""
-sudo apt install -y python3-pip python3-dev sense-hat p7zip-full sense-hat gpiod libgpiod-dev python3-pil \ 
-python3-spidev python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio
-pip3 install roonapi --break-system-packages
-pip3 install pillow numpy RPi.GPIO spidev smbus tomli-w gpiod --break-system-packages
+sudo apt install -y python3-pip python3-dev sense-hat p7zip-full sense-hat gpiod libgpiod-dev python3-pil python3-spidev \
+ python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio
+pip3 install roonapi pillow numpy RPi.GPIO spidev smbus tomli-w gpiod --break-system-packages
 
 case $c_display_type in
   2)
@@ -81,6 +80,9 @@ case $c_display_type in
     echo ""
     echo "Checking /boot/config.txt for required parameters, changing if required"
     sudo bash -c 'grep -qxF 'dtparam=spi=on' /boot/firmware/config.txt || sudo echo 'dtparam=spi=on' >> /boot/firmware/config.txt'
+    ;;
+  3)
+        sudo bash -c 'grep -qxF 'dtparam=spi=on' /boot/firmware/config.txt || sudo echo 'dtparam=spi=on' >> /boot/firmware/config.txt'
     ;;
 esac
 sleep 2
@@ -118,6 +120,10 @@ if [[ "$c_local_or_pico" = "L" ]]; then
 
 
   elif [[ "$c_local_or_pico" = "P" ]]; then
+      echo " "
+    echo "Copying main program into place"
+    echo ""
+    sudo cp ./roon_cad_pico.py /usr/local/bin/.
     sudo chown "$USER" /usr/local/bin/roon_cad_pico.py
     sleep 2
 #
@@ -151,8 +157,7 @@ echo "Adding current user to groups required to access LED displays"
 echo ""
 sudo usermod -a -G video,input,spi,gpio "$USER"
 sleep 2
-if [ -d /etc/roon ]
-then
+if [ -d /etc/roon ]; then
   echo ""
   echo "roon directory exists, no need to authorise the service in the roon app ... continuing ..."
   echo ""
@@ -170,16 +175,16 @@ else
   sudo chmod 777 /etc/roon/config.toml
   echo ""
   sleep 2
-  python3 ./discovery.py c_local_or_pico
-  sleep 2
-  echo "target_zone = '"'$c_target_zone'"'" >> /etc/roon/config.toml
+  python3 ./discovery.py "$c_local_or_pico"
+  echo "target_zone = \"$c_roon_zone\"" >> /etc/roon/config.toml
   if [[ "$c_local_or_pico" = "L" ]]; then
-    echo "[local]" >> /roon/config.toml
-    echo "display_type = "\"$c_display_type\"" >> /roon/config.toml"
+    echo "[local]" >> /etc/roon/config.toml
+    echo "display_type = \"$c_display_type\"" >> /etc/roon/config.toml
   elif [[ "$c_local_or_pico" = "P" ]]; then
-    echo "[pico]" >> /roon/config.toml
-    echo "ip = "\"$c_pico_ip\"" >> /roon/config.toml
-    echo "baseline_width = "\"$c_pico_width\"" >> /etc/roon/config.toml
+    echo "[pico]" >> /etc/roon/config.toml
+    echo "ip = \"$c_pico_ip\"" >> /etc/roon/config.toml
+    echo "baseline_width = \"$c_pico_width\"" >> /etc/roon/config.toml
+    echo "port = 5000" >> /etc/roon/config.toml
     echo " "
   fi
 fi
