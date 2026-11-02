@@ -20,13 +20,13 @@ Be careful with your wiring, it is very sensitive
 
 LCD pin	Wire colour	Raspberry Pi connection	Physical pin
 VCC	        🔴 Red	  3.3V	                    1
-GND	        ⚫ Black	 GND	                   6
-SCL	        🟡 Yellow GPIO11 / SPI0 SCLK	    23
-SDA	        🟢 Green  GPIO10 / SPI0 MOSI	    19
+GND	        ⚫ Black	 GND                       6
+SCL	        🟡 Yellow GPIO11 / SPI0 SCLK        23
+SDA	        🟢 Green  GPIO10 / SPI0 MOSI        19
 CS	        🔵 Blue	  GPIO8 / SPI0 CE0	        24
 DC	        ⚪ White	 GPIO25	                   22
 RST	        🟠 Orange GPIO27	                13
-BL	        🟣 Purple GPIO24	                18
+BL	        🟣 Purple GPIO24                    18
 
 Requirements:
     python3-spidev
