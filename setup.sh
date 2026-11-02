@@ -92,6 +92,8 @@ if [[ "$c_local_or_pico" = "L" ]]; then
     echo ""
     sudo cp ./roon_cad_local.py /usr/local/bin/.
     sudo chown "$USER" /usr/local/bin/roon_cad_local.py
+    sudo cp ./xytft.py /usr/local/bin/.
+    sudo chown "$USER" /usr/local/bin/xytft.py
     sleep 2
 #
 #   Now test to see if service files exists, if it does, stop it and disable it.
