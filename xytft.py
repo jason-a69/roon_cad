@@ -33,19 +33,19 @@ Requirements:
     python3-lgpio
     python3-pil
 """
-
 import time
 import spidev
 import lgpio
-from io import BytesIO
 
+from io import BytesIO
 from PIL import Image, ImageChops, ImageDraw, ImageFont
+
 
 class Display:
 
     DC = 25
     RST = 27
-    BL = 24  # BCM GPIO24, physical pin 18
+    BL = 24
 
     SPI_BUS = 0
     SPI_DEVICE = 0
@@ -73,6 +73,7 @@ class Display:
         try:
             lgpio.gpio_claim_output(self.gpio, self.DC, 1)
             lgpio.gpio_claim_output(self.gpio, self.RST, 1)
+            lgpio.gpio_claim_output(self.gpio, self.BL, 0)
 
             self.spi = spidev.SpiDev()
             self.spi.open(self.SPI_BUS, self.SPI_DEVICE)
@@ -80,9 +81,9 @@ class Display:
             self.spi.mode = 0
             self.spi.max_speed_hz = int(spi_speed_hz)
             self.spi.bits_per_word = 8
-            lgpio.gpio_claim_output(self.gpio, self.BL, 0)
 
         except Exception:
+
             if hasattr(self, "spi"):
                 self.spi.close()
 
@@ -305,41 +306,109 @@ class Display:
 
         self._last_frame = image.copy()
 
+    # --------------------------------------------------
+    # GET RAW IMAGE BUFFER
+    # --------------------------------------------------
+
+    def getbuffer(self, image):
+        """
+        Convert a PIL image into raw RGB888 bytes.
+
+        The output is:
+            width * height * 3 bytes
+
+        Pixel order:
+            R, G, B, R, G, B, ...
+
+        This is raw pixel data, NOT PNG or JPEG data.
+        """
+
+        if self._closed:
+            raise RuntimeError("Display is closed")
+
+        if not isinstance(image, Image.Image):
+            raise TypeError(
+                "getbuffer() expects a PIL.Image.Image object"
+            )
+
+        image = image.convert("RGB")
+
+        if image.size != (self.width, self.height):
+
+            image = image.resize(
+                (self.width, self.height),
+                Image.Resampling.LANCZOS
+            )
+
+        return image.tobytes()
+
+    # --------------------------------------------------
+    # SHOW IMAGE BUFFER
+    # --------------------------------------------------
+
     def ShowImage(self, image_buffer):
         """
-        Display an image supplied as a buffer.
+        Display an image or image buffer.
 
         Accepts:
-          - JPEG/PNG/etc. encoded bytes, bytearray or memoryview
-          - io.BytesIO or another seekable file-like object
-          - A Pillow Image object
-
-        The image is converted to RGB and resized by show() if necessary.
+            1. PIL Image object
+            2. Raw RGB888 bytes from getbuffer()
+            3. Encoded JPEG/PNG bytes
+            4. BytesIO or another file-like object
         """
+
         if self._closed:
             raise RuntimeError("Display is closed")
 
         if isinstance(image_buffer, Image.Image):
+
             image = image_buffer.copy()
 
-        elif isinstance(image_buffer, (bytes, bytearray, memoryview)):
-            with Image.open(BytesIO(bytes(image_buffer))) as decoded:
-                decoded.load()
-                image = decoded.convert("RGB")
+        elif isinstance(
+            image_buffer,
+            (bytes, bytearray, memoryview)
+        ):
+
+            raw = bytes(image_buffer)
+
+            expected_raw_size = (
+                self.width * self.height * 3
+            )
+
+            if len(raw) == expected_raw_size:
+
+                # Raw RGB888 pixel data from getbuffer().
+                image = Image.frombytes(
+                    "RGB",
+                    (self.width, self.height),
+                    raw
+                )
+
+            else:
+
+                # Encoded PNG/JPEG/etc. image data.
+                with Image.open(BytesIO(raw)) as decoded:
+
+                    decoded.load()
+                    image = decoded.convert("RGB")
 
         elif hasattr(image_buffer, "read"):
-            # Allow a reusable BytesIO/file-like buffer.
+
+            # File-like buffer.
             if hasattr(image_buffer, "seek"):
                 image_buffer.seek(0)
 
             with Image.open(image_buffer) as decoded:
+
                 decoded.load()
                 image = decoded.convert("RGB")
 
         else:
+
             raise TypeError(
-                "image_buffer must be encoded image bytes, a file-like "
-                "buffer, or a PIL Image"
+                "image_buffer must be raw RGB888 bytes, "
+                "encoded image bytes, a file-like buffer, "
+                "or a PIL Image"
             )
 
         self.show(image)
@@ -466,6 +535,7 @@ class Display:
                 ).getbbox()
 
                 if changed and run_start is None:
+
                     run_start = left
 
                 elif not changed and run_start is not None:
@@ -616,6 +686,7 @@ class Display:
 
     def close(self):
         """Turn off the backlight and release SPI/GPIO resources."""
+
         if self._closed:
             return
 

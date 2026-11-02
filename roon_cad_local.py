@@ -28,6 +28,11 @@ target_zone = config["server"]["target_zone"]
 
 display_type = config["local"]["display_type"]
 
+discover = RoonDiscovery(core_id)
+server = discover.first()
+discover.stop()
+roonapi = RoonApi(appinfo, token, server[0], server[1], True)
+
 # Displays supported so far (put these parameters in your [local] header block in /etc/roon/config.toml)
 # display_type = "sense"
 # https://www.raspberrypi.com/products/sense-hat/
@@ -61,6 +66,7 @@ elif display_type == "ws1in5":
 
 elif display_type == "2.0TFT":
     from xytft import Display
+    basewidth = 320
 
     disp = Display()
 
@@ -121,7 +127,7 @@ def display_art():
                                 # Shrink the picture to the basewidth (depends on the display)
                                 wpercent = (basewidth / float(image_roon.size[0]))
                                 hsize = int((float(image_roon.size[1]) * float(wpercent)))
-                                display_image = image_roon.resize((basewidth, hsize), Image.ANTIALIAS).convert('RGBA')
+                                display_image = image_roon.resize((basewidth, hsize), Image.Resampling.LANCZOS).convert('RGBA')
 
                                 if display_type == "sense":
                                     # Save the picture and then display it on the sense hat
