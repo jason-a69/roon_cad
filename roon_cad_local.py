@@ -46,8 +46,6 @@ roonapi = RoonApi(appinfo, token, server[0], server[1], True)
 # 2.0TFT (sourced from Taobao so I cannot share that link here, this is similar)
 # display_type = "2.0TFT"
 # https://www.alibaba.com/product-detail/2-0-inch-TFT-LCD-LCD_1601295816403.html
-# libraries required 
-# pip install adafruit-circuitpython-st7789 adafruit-blinka --break-system-packages
 
 
 if display_type == "sense":
@@ -149,6 +147,6 @@ def display_art():
                         image_roon.close()
                         del image_roon
                         break
-
+            sleep(1.7)
 
 main()

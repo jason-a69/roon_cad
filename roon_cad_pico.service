@@ -4,12 +4,15 @@
 
 # Human readable name of the unit
 Description=Roon Cover Art Display Service (send to pico)
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 
 # Command to execute when the service is started
 ExecStart=/bin/bash -c '/usr/bin/python3 /usr/local/bin/roon_cad_pico.py'
 Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/tmp
 
 # Automatically restart the service if it crashes
 Restart=on-failure

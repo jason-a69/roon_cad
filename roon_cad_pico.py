@@ -156,7 +156,7 @@ def display_art():
                         send_to_pico(data)
 
                         break
-
+            sleep(1.7)
 
 def send_to_pico(data):
 
