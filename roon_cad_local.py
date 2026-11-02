@@ -61,9 +61,11 @@ elif display_type == "ws1in5":
 
 elif display_type == "2.0TFT":
     from xytft import Display
-    # with Display as disp
 
-    disp.Init()
+    disp = Display()
+
+    disp.init()
+
 
 disp.clear()
 
