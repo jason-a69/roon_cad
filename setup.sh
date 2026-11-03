@@ -28,7 +28,7 @@ echo "(You can stop this script with CTRL-C)"
 echo " "
 echo "Will you be running this on a display attached to the Pi or to a remote Pico?"
 echo " "
-echo "Enter L or P " 
+echo "Enter L (local pi) or P (Pico) " 
 read -r c_local_or_pico
 echo " "
 echo "Please enter you Roon zone : "
@@ -58,6 +58,7 @@ elif [[ "$c_local_or_pico" = "P" ]]; then
     read -r c_pico_width
     echo " "
 else
+    echo "Questions not answered, exiting"
     exit # Exit if questions are not answered
 fi
 echo ""
@@ -71,14 +72,14 @@ sudo apt install -y python3-pip python3-dev sense-hat p7zip-full sense-hat gpiod
  python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio
 pip3 install roonapi pillow numpy RPi.GPIO spidev smbus tomli-w gpiod --break-system-packages
 
-case $c_display_type in
+case $c_display_number in
   2)
     sudo wget https://www.waveshare.com/w/upload/2/2c/OLED_Module_Code.7z
     7z x OLED_Module_Code.7z -O./OLED_Module_Code
     sudo cp -r ./OLED_Module_Code/RaspberryPi/python/lib/waveshare_OLED /usr/local/bin/.
     sudo chown -R "$USER" /usr/local/bin/waveshare_OLED
     echo ""
-    echo "Checking /boot/config.txt for required parameters, changing if required"
+    echo "Checking /boot/firmware/config.txt for required parameters, changing if required"
     sudo bash -c 'grep -qxF 'dtparam=spi=on' /boot/firmware/config.txt || sudo echo 'dtparam=spi=on' >> /boot/firmware/config.txt'
     ;;
   3)
