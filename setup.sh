@@ -213,7 +213,7 @@ else
   elif [[ "$c_local_or_pico" = "P" ]]; then
     echo "[pico]" >> /etc/roon/config.toml
     echo "ip = \"$c_pico_ip\"" >> /etc/roon/config.toml
-    echo "baseline_width = \"$c_pico_width\"" >> /etc/roon/config.toml
+    echo "basewidth = \"$c_pico_width\"" >> /etc/roon/config.toml
     echo "port = 5000" >> /etc/roon/config.toml
     echo " "
   fi

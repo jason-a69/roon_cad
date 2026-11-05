@@ -49,22 +49,22 @@ from os import path
 from time import sleep
 
 appinfo = {
-    "extension_id": "roon_cad",
-    "display_name": "Python program to display cover art on a display",
+    "extension_id": "roon_cad_pico",
+    "display_name": "Python program to display cover art on a Pi Pico display",
     "display_version": "1.0.0",
     "publisher": "jason-a69",
     "email": "email@yahoo.co.uk",
 }
 
 
-with open("/etc/roonconfig.toml", "rb") as toml_file:
+with open("/etc/roon/config.toml", "rb") as toml_file:
     config = tomllib.load(toml_file)
 
 pico_ip = config["pico"]["ip"]
 port = config["pico"]["port"]
 basewidth = config["pico"]["basewidth"]
 
-target_size = (basewidth,basewidth)
+target_size = (int(basewidth),int(basewidth))
 core_id = config["server"]["core_id"]
 token = config["server"]["token"]
 target_zone = config["server"]["target_zone"]
@@ -144,7 +144,7 @@ def display_art():
                         # We have stopped playing music so send a blank image to the 
                         # Pico2 W which will clear down the art which was previously
                         # being displayed
-                        arr = np.zeros((basewidth, basewidth, 3), dtype=np.uint8)
+                        arr = np.zeros((int(basewidth), int(basewidth), 3), dtype=np.uint8)
                         img = Image.fromarray(arr)
                         data = bytearray()
                         for r, g, b in img.getdata():
