@@ -69,7 +69,7 @@ echo ""
 echo "Installing software"
 echo ""
 sudo apt install -y python3-pip python3-dev sense-hat p7zip-full sense-hat gpiod libgpiod-dev python3-pil python3-spidev \
- python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio
+ python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio python3-pip
 pip3 install roonapi pillow numpy RPi.GPIO spidev smbus tomli-w gpiod --break-system-packages
 
 case $c_display_number in
