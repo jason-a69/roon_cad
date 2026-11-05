@@ -25,43 +25,60 @@ elif running_mode == "P":
         "email": "email@yahoo.co.uk",
     }
 
-discover = RoonDiscovery(None)
-servers = discover.all()
+def authorise_extension():
 
-print("Shutdown discovery")
-discover.stop()
+    discover = RoonDiscovery(None)
+    time.sleep(3)
 
-print("Found the following servers")
-print(servers)
-apis = [RoonApi(appinfo, None, server[0], server[1], False) for server in servers]
+    discovered_cores = discover.all()
+    discover.stop()
+    
+    if not discovered_cores:
+        print("[-] Error: No Roon Core found. Are you on the same Wi-Fi/LAN?")
+        return
 
-auth_api = []
-while len(auth_api) == 0:
-    print("Waiting for authorisation")
-    time.sleep(1)
-    auth_api = [api for api in apis if api.token is not None]
+    core_ip, core_port = discovered_cores[0]
+    print(f"[+] Found Core at {core_ip}:{core_port}")
 
-api = auth_api[0]
+    print("Waiting for you to enable the extension in Roon...")
 
-print("Received authorisation")
-print(api.host)
-print(api.core_name)
-print(api.core_id)
+    api = RoonApi(
+        appinfo,
+        token=None,
+        host=core_ip,
+        port=core_port,
+        blocking_init=False
+    )
 
-print("Shutdown apis")
-for api in apis:
+    # Poll until the user hits "Enable" in the Roon app
+    while not api.token:
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            print("\n[-] Cancelled by user.")
+            api.stop()
+            return
+
     api.stop()
 
-config_data = {
-    "server": {
+    print("Received authorisation")
+    print(api.host)
+    print(api.core_name)
+    print(api.core_id)
+
+    config_data = {
+        "server": {
         "host": api.host,
         "core_name": api.core_name,
         "core_id": api.core_id,
         "token": api.token
+        }
     }
-}
 
-#print(f"config_data is {config_data}")
+    print(f"config_data is {config_data}")
 
-with open("/etc/roon/config.toml", "wb") as toml_file:
-    tomli_w.dump(config_data, toml_file)
+    with open("/etc/roon/config.toml", "wb") as toml_file:
+        tomli_w.dump(config_data, toml_file)
+
+if __name__ == "__main__":
+    authorise_extension()

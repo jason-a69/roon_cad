@@ -68,9 +68,30 @@ sleep 2
 echo ""
 echo "Installing software"
 echo ""
-sudo apt install -y python3-pip python3-dev sense-hat p7zip-full sense-hat gpiod libgpiod-dev python3-pil python3-spidev \
- python3-rpi.gpio python3 python3-pip python3-venv python3-lgpio python3-pip
-pip3 install roonapi pillow numpy RPi.GPIO spidev smbus tomli-w gpiod --break-system-packages
+
+case "$(uname -m)" in
+    x86_64)
+        echo "Running on 64-bit Intel/AMD (x86_64)"
+        # Your x86_64 logic here
+        ;;
+    arm64|aarch64)
+        echo "Running on 64-bit ARM (ARM64/Aarch64)"
+        # Your ARM64 logic here
+        sudo apt install -y sense-hat python3-lgpio python3-rpi.gpio 
+        pip3 install RPi.GPIO spidev smbus gpiod --break-system-packages
+
+        ;;
+    i386|i686)
+        echo "Running on 32-bit Intel/AMD (x86)"
+        ;;
+    *)
+        echo "Unknown architecture: $(uname -m)"
+        ;;
+esac
+
+sudo apt install -y python3-pip python3-dev p7zip-full gpiod libgpiod-dev python3-pil python3-spidev \
+ python3 python3-venv 
+pip3 install roonapi pillow numpy tomli-w --break-system-packages
 
 case $c_display_number in
   2)
@@ -154,12 +175,18 @@ if [[ "$c_local_or_pico" = "L" ]]; then
     sudo systemctl daemon-reload
     sudo systemctl enable roon_cad_pico
 fi
-echo ""
-echo ""
-echo "Adding current user to groups required to access LED displays"
-echo ""
-sudo usermod -a -G video,input,spi,gpio "$USER"
-sleep 2
+
+case "$(uname -m)" in
+    arm64|aarch64)
+        echo ""
+        echo ""
+        echo "Adding current user to groups required to access LED displays"
+        echo ""
+        sudo usermod -a -G video,input,spi,gpio "$USER"
+        sleep 2
+        ;;
+esac
+
 if [ -d /etc/roon ]; then
   echo ""
   echo "roon directory exists, no need to authorise the service in the roon app ... continuing ..."
