@@ -28,8 +28,21 @@ echo "(You can stop this script with CTRL-C)"
 echo " "
 echo "Will you be running this on a display attached to the Pi or to a remote Pico?"
 echo " "
-echo "Enter L (local pi) or P (Pico) " 
-read -r c_local_or_pico
+echo "Enter 1 for a local Raspberry Pi or 2 for a Raspberry Pico connected to your network"
+read -r n_local_or_pico
+c_local_or_pico=""
+case $n_local_or_pico in
+1)
+  c_local_or_pico="L"
+  ;;
+2)
+  c_local_or_pico="P"
+  ;;
+*)
+  echo " "
+  echo "Questions not answered, exiting"
+  exit
+esac
 echo " "
 echo "Please enter you Roon zone : "
 read -r c_roon_zone
@@ -184,10 +197,9 @@ case "$(uname -m)" in
         sleep 2
         ;;
 esac
-
 if [ -d /etc/roon ]; then
   echo ""
-  echo "roon directory exists, no need to authorise the service in the roon app ... continuing ..."
+  echo "Roon directory exists, no need to authorise the service in the roon app ... continuing ..."
   echo ""
   sleep 2
 else
